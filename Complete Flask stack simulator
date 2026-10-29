@@ -1,0 +1,67 @@
+from flask import Flask, render_template, request
+
+app = Flask(__name__)
+
+class Stack:
+    def __init__(self):
+        self.items = []
+        self.removed_items = []
+        self.peek_value = None
+
+    def push(self, value):
+        if value.strip() != "":
+            self.items.append(value.strip())
+
+    def pop(self):
+        if not self.is_empty():
+            val = self.items.pop()
+            self.removed_items.append(val)
+            return val
+        return None
+
+    def peek(self):
+        if not self.is_empty():
+            self.peek_value = self.items[-1]
+            return self.items[-1]
+        self.peek_value = None
+        return None
+
+    def clear(self):
+        self.items = []
+        self.removed_items = []
+        self.peek_value = None
+
+    def is_empty(self):
+        return len(self.items) == 0
+
+stack = Stack()
+
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    message = ""
+    if request.method == 'POST':
+        action = request.form.get('action')
+        value = request.form.get('value', '')
+
+        if action == 'push':
+            if value.strip() == "":
+                message = "⚠️ Ilagay ang halaga bago mag-push."
+            else:
+                stack.push(value)
+        elif action == 'pop':
+            if stack.is_empty():
+                message = "⚠️ Walang laman ang stack — hindi makapag-pop."
+            else:
+                stack.pop()
+        elif action == 'peek':
+            if stack.is_empty():
+                message = "⚠️ Walang laman ang stack — hindi makapag-peek."
+            else:
+                stack.peek()
+        elif action == 'clear':
+            stack.clear()
+
+    return render_template('index.html', items=stack.items, removed_items=stack.removed_items, peek_value=stack.peek_value, message=message)
+
+if __name__ == '__main__':
+    app.run(debug=True)
