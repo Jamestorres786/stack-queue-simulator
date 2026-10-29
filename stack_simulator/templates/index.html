@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stack Simulator - LIFO</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container py-4">
+        <h1 class="text-center mb-4">Stack Simulator (Last In, First Out)</h1>
+        {% if message %}<div class="alert alert-warning">{{ message }}</div>{% endif %}
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <div class="card-header">Mga Operasyon</div>
+                    <div class="card-body">
+                        <form method="POST">
+                            <div class="mb-3">
+                                <label class="form-label">Ilagay ang Halaga</label>
+                                <input type="text" name="value" class="form-control" placeholder="I-type dito...">
+                            </div>
+                            <div class="d-grid gap-2">
+                                <button type="submit" name="action" value="push" class="btn btn-primary">Push</button>
+                                <button type="submit" name="action" value="pop" class="btn btn-danger">Pop</button>
+                                <button type="submit" name="action" value="peek" class="btn btn-warning">Peek</button>
+                                <button type="submit" name="action" value="clear" class="btn btn-secondary">Clear</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header text-center">Stack (Itaas →)</div>
+                    <div class="card-body p-2">
+                        {% if items %}
+                            {% for item in items|reverse %}
+                            <div class="alert {% if peek_value == item %}alert-primary border-2 border-dark{% else %}alert-light border{% endif %} text-center py-2 mb-1">{{ item }}</div>
+                            {% endfor %}
+                        {% else %}<p class="text-muted text-center">Walang laman</p>{% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">Inalis na mga Bagay</div>
+                    <div class="card-body">
+                        {% if removed_items %}{% for item in removed_items %}<span class="badge bg-secondary m-1">{{ item }}</span>{% endfor %}
+                        {% else %}<p class="text-muted">Wala pa</p>{% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
